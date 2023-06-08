@@ -47,7 +47,7 @@ console.log(aa.length);
 
   async function crawlPage (BASE_URL){
     let url = await fetch(BASE_URL,{
-        
+
     })
 
   }
@@ -56,17 +56,17 @@ module.exports = {
     normalizeURL,
     getURLsFromHTML
 }
-// normalizeURL('http://wagslane.dev/path/')
-// getURLsFromHTML(`<html>
-//                     <body>
-//                         <a href="/path/first/hello.txt"><span>Go to Bootq.dev</span></a>
-//                         <p>yooooo<p/>
-//                         <a href=''><span>Go to Boots.dev</span></a>
-//                         <p>yooooo<p/>
-//                         <a href='/path/first'><span>Go to Bootz.dev</span></a>
-//                         <p>yooooo<p/>
-//                         <a href='/path'><span>Go to Bootz.dev</span></a>
-//                     </body>
-//                     </html>`,
-//                     'https://wagslane.dev'
-// )
+normalizeURL('http://wagslane.dev/path/')
+getURLsFromHTML(`<html>
+                    <body>
+                        <a href="/path/first/hello.txt"><span>Go to Bootq.dev</span></a>
+                        <p>yooooo<p/>
+                        <a href=''><span>Go to Boots.dev</span></a>
+                        <p>yooooo<p/>
+                        <a href='/path/first'><span>Go to Bootz.dev</span></a>
+                        <p>yooooo<p/>
+                        <a href='/path'><span>Go to Bootz.dev</span></a>
+                    </body>
+                    </html>`,
+                    'https://wagslane.dev'
+)
