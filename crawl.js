@@ -1,3 +1,4 @@
+const { error } = require('console')
 const { JSDOM } = require('jsdom')
 
 let normalizeURL = (inputUrl)=>{
@@ -20,53 +21,83 @@ let getURLsFromHTML = (htmlBody, baseURL)=>{
 
     }
     return ans
+  }
+  
+async function crawlPage (BASE_URL){
+  try {
+    let response = await fetch(BASE_URL)
+    const status = response.ok;
+    const content = response.headers.get('Content-Type');
+    
+    if(!status) throw new Error(`${response.status}  error`)
+    if(content != 'text/html') throw new Error(`content type is not text/html error`)
+  } catch (error) {
+    console.log(error);
+  }
 }
 
-const readline = require('readline').createInterface({
+let main = (bl)=>{
+  const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout,
   });
-let hii = 'how are you sonin'
-let aa = hii.split(" ")
-console.log(aa.length);
   
   readline.question(`What's your name?`, (num) => {
     let arr = num.split(" ")
     if(arr.length>1) console.log('cli arg is more than one');
     else if(arr.length<1) console.log('cli arg is less than one');
-    else console.log('starting web crawling');
+    else{
+      console.log('starting web crawling');
+      crawlPage(BASE_URL)
+    } 
     readline.close();
   });
+}
 
-  let main = (bl)=>{
-    let arr = bl.spl
-    if(arr.length>1) console.log('cli arg is more than one');
-    else if(arr.length<1) console.log('cli arg is less than one');
-    else console.log('starting web crawling');
-  }
+main()
 
-  async function crawlPage (BASE_URL){
-    let url = await fetch(BASE_URL,{
+  // async function crawlPage (BASE_URL){
+  //   let response = await fetch(BASE_URL)
+  //   const status = response.ok;
+  //   const content = response.headers.get('Content-Type');
+    
+  //   if(!status) throw new Error(`${response.status}  error`)
+  //   if(content != 'text/html') throw new Error(`content type is not text/html error`)
+  // }
+  
+  // try {
+  //   crawlPage(BASE_URL);
+  // } catch (error) {
+  //   console.log(error);
+  // }
 
-    })
+  
 
-  }
+  // function generateKey() {
+  //   const characters = 'ABCDEF0123456789'
+  //   let result = ''
+  //   for (let i = 0; i < 16; i++) {
+  //     result += characters.charAt(Math.floor(Math.random() * characters.length))
+  //   }
+  //   return result
+  // }
 
 module.exports = {
     normalizeURL,
     getURLsFromHTML
 }
-normalizeURL('http://wagslane.dev/path/')
-getURLsFromHTML(`<html>
-                    <body>
-                        <a href="/path/first/hello.txt"><span>Go to Bootq.dev</span></a>
-                        <p>yooooo<p/>
-                        <a href=''><span>Go to Boots.dev</span></a>
-                        <p>yooooo<p/>
-                        <a href='/path/first'><span>Go to Bootz.dev</span></a>
-                        <p>yooooo<p/>
-                        <a href='/path'><span>Go to Bootz.dev</span></a>
-                    </body>
-                    </html>`,
-                    'https://wagslane.dev'
-)
+
+// normalizeURL('http://wagslane.dev/path/')
+// getURLsFromHTML(`<html>
+//                     <body>
+//                         <a href="/path/first/hello.txt"><span>Go to Bootq.dev</span></a>
+//                         <p>yooooo<p/>
+//                         <a href=''><span>Go to Boots.dev</span></a>
+//                         <p>yooooo<p/>
+//                         <a href='/path/first'><span>Go to Bootz.dev</span></a>
+//                         <p>yooooo<p/>
+//                         <a href='/path'><span>Go to Bootz.dev</span></a>
+//                     </body>
+//                     </html>`,
+//                     'https://wagslane.dev'
+// )
