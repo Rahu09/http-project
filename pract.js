@@ -1,11 +1,24 @@
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
+let pages = {};
+pages['hii'] = 'yo'
+let hii = 'yo'
+console.log(pages[hii]);
 
-  let sum = (num1)=>'kjkbkknjnnkjnk'+num1
-  
-  readline.question(`What's your name?`, (num1) => {
-    console.log(sum(num1));
-    readline.close();
-  });
+// async function crawlPage(currentURL, pages){
+//   let ans = pages;
+
+//   if(ans[currentURL] != undefined){
+//     ans[currentURL]= ans.currentURL+1;
+//     console.log('00');
+//     return ans;
+//   } else {
+//     console.log('11');
+//     ans[currentURL] = 1;
+//     crawlPage(currentURL,ans)
+//   }
+//   return ans;
+// }
+// let currentURL = 'https://wagslane.dev';
+// pages.currentURL =1;
+// console.log(pages);
+// console.log(pages.currentURL == undefined);
+// crawlPage('https://wagslane.dev',pages)

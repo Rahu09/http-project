@@ -24,39 +24,62 @@ let getURLsFromHTML = (htmlBody, baseURL)=>{
   return ans
 }
   
-async function crawlPage (BASE_URL){
-  try {
-    let response = await fetch(BASE_URL)
-    const status = response.ok;
-    const content = response.headers.get('Content-Type');
-    
-    if(!status) throw new Error(`${response.status}  error`)
-    else if(content.substring(0,9) != 'text/html') throw new Error(`content type is not text/html error it is${content}`)
-    else{
-      let text = await response.text();
-      console.log(text); 
-    }  
-  } catch (error) {
-    console.log(error);
+async function crawlPage(baseURL, currentURL, pages){
+  let ans = pages;
+  if(currentURL.charAt(0) == '/' || currentURL.substring(0,baseURL.length) != baseURL) {
+    return ans;
   }
+      console.log(currentURL);
+  currentURL = normalizeURL(currentURL)
+
+  if( ans[currentURL] != undefined){
+    ans[currentURL] = ans[currentURL]+1;
+    return ans;
+  } else {
+    ans[currentURL] = 1;
+    try {
+      let response = await fetch(currentURL)
+      const status = response.ok;
+      const content = response.headers.get('Content-Type');
+      
+      if(!status) throw new Error(`${response.status}  error`)
+      else if(content.substring(0,9) != 'text/html') throw new Error(`content type is not text/html error it is${content}`)
+      else{
+        let text = await response.text();
+        //getting all the url in the current page
+        let urlArr =getURLsFromHTML(text,baseURL);
+        for (let i = 0; i < urlArr.length; i++) {
+          const ele = urlArr[i];
+          ans = await crawlPage(baseURL,ele,ans);
+        }
+      }  
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  return ans;
 }
 
-let main = (bl)=>{
+let pages = {}
+function main(){
   const readline = require('readline').createInterface({
     input: process.stdin,
     output: process.stdout,
   });
   
-  readline.question(`What's your name?`, (num) => {
-    let arr = num.split(" ")
-    if(arr.length>1) console.log('cli arg is more than one');
-    else if(arr.length<1) console.log('cli arg is less than one');
-    else{
-      console.log('starting web crawling');
-      crawlPage(num)
-    } 
-    readline.close();
-  });
+  readline.question(`What's your name?`, async function (num) {
+      let arr = num.split(" ")
+      if (arr.length > 1)
+        console.log('cli arg is more than one')
+      else if (arr.length < 1)
+        console.log('cli arg is less than one')
+      else {
+        console.log(`starting web crawling with ${num}`)
+        pages = await crawlPage(num, num, pages)
+      }
+      console.log(pages);
+      readline.close()
+    });
 }
 
 main()
