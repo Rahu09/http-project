@@ -18,7 +18,7 @@ let getURLsFromHTML = (htmlBody, baseURL)=>{
     
     if(ele.length >= baseURL.length && ele.substring(0,baseURL.length) == baseURL) ans[i] = ele
     else if(ele.length >= baseURL.length && ele.charAt(0) == '/') ans[i] = baseURL+ele
-    else delete ans[i];
+    else ans[i];
     
   }
   return ans
@@ -26,10 +26,9 @@ let getURLsFromHTML = (htmlBody, baseURL)=>{
   
 async function crawlPage(baseURL, currentURL, pages){
   let ans = pages;
-  if(currentURL == undefined) {
+  if(currentURL == undefined || currentURL.substring(0,baseURL.length) != baseURL) {
     return ans;
   }
-  console.log(currentURL);
   currentURL = normalizeURL(currentURL)
 
   if( ans[currentURL] != undefined){
@@ -50,6 +49,7 @@ async function crawlPage(baseURL, currentURL, pages){
         let urlArr =getURLsFromHTML(text,baseURL);
         for (let i = 0; i < urlArr.length; i++) {
           const ele = urlArr[i];
+          console.log(ele);
           ans = await crawlPage(baseURL,ele,ans);
         }
       }  
@@ -67,7 +67,7 @@ function main(){
     output: process.stdout,
   });
   
-  readline.question(`What's your name?`, async function (num) {
+  readline.question(`paste the base url of site here `, async function (num) {
       let arr = num.split(" ")
       if (arr.length > 1)
         console.log('cli arg is more than one')
